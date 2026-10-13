@@ -2,38 +2,38 @@
 
 [English](README.md)
 
-[![Release](https://img.shields.io/github/v/release/Nikitid/weexport-updates)](https://github.com/Nikitid/weexport-updates/releases) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![CI](https://github.com/Nikitid/weexport-updates/actions/workflows/ci.yml/badge.svg)](https://github.com/Nikitid/weexport-updates/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/Nikitid/weexport-updates)](https://github.com/Nikitid/weexport-updates/releases) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 Публичное размещение установщиков и подписанных обновлений WeExport.
 
-## Features
+## Возможности
 
 Подписанная лента, архивы приложения, установщики и контрольные суммы.
 
-## Requirements
+## Требования
 
 macOS 14 или новее на Apple silicon.
 
-## Installation
+## Установка
 
 Скачайте установщик в [Releases](https://github.com/Nikitid/weexport-updates/releases).
 
-## Updates
+## Обновления
 
 Версии со старой лентой требуют однократной ручной установки версии с адресом этого репозитория.
 
-## Development
+## Разработка
 
-Исходники приложения хранятся отдельно. Здесь размещены только данные для распространения.
+Исходники приложения хранятся отдельно. Здесь размещены данные для распространения и скрипты проверки. См. [Development](docs/DEVELOPMENT.md).
 
-## Documentation
+## Документация
 
 В релизах размещены лицензии зависимостей и соответствующие исходники сторонних компонентов.
 
-## Support
+## Поддержка
 
-Используйте [Issues](https://github.com/Nikitid/weexport-updates/issues). Не прикладывайте историю чатов, ключи аккаунта и персональные данные.
+Для отправки описания, необязательной диагностики и выбранных фото или видео используйте "Справка -> Сообщить об ошибке" в WeExport. Диагностику можно просмотреть до отправки. Публичные вопросы размещайте в [Issues](https://github.com/Nikitid/weexport-updates/issues), исключив историю чатов, ключи аккаунта и персональные данные.
 
-## License
+## Лицензия
 
 См. [LICENSE](LICENSE). Сторонние компоненты сохраняют собственные лицензии.
