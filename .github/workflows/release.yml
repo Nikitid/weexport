@@ -1,0 +1,33 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+concurrency:
+  group: release
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: macos-26
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check documentation
+        run: sh scripts/check-readme.sh
+      - name: Download signed draft assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download "$GITHUB_REF_NAME" --dir dist/release
+      - name: Verify release assets and installer payload
+        run: python3 scripts/verify-release.py "$GITHUB_REF_NAME" dist/release
+      - name: Build release notes
+        run: sh scripts/release-notes.sh "$GITHUB_REF_NAME" > dist/release-notes.md
+      - name: Publish verified update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit "$GITHUB_REF_NAME" --draft=false --latest --notes-file dist/release-notes.md

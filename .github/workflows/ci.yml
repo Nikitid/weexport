@@ -1,0 +1,16 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sh scripts/check-readme.sh
+      - run: python3 -m py_compile scripts/verify-release.py
+      - run: sh -n scripts/release-notes.sh
+      - run: git diff --check
