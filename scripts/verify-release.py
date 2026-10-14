@@ -20,11 +20,14 @@ def main():
     tag, folder = sys.argv[1], Path(sys.argv[2])
     version = json.loads((ROOT / 'version.json').read_text())
     config = json.loads((ROOT / 'updates.json').read_text())
-    assert tag == 'v' + version['version'], 'Tag does not match version.json'
+    beta = tag == f"v{version['version']}_beta{version['build']}"
+    assert tag == 'v' + version['version'] or beta, 'Tag does not match version.json'
     archive = f"WeExport-{version['version']}-{version['build']}.zip"
+    # Delta patches from earlier builds; each must be listed and signed in the feed.
+    deltas = {p.name for p in folder.glob(f"WeExport-{version['build']}-from-*.delta")}
     expected = {archive, 'appcast.xml', f"WeExport-{version['version']}.pkg",
                 f"WeExport-{version['version']}-installer.zip",
-                f"WeExport-{version['version']}-third-party-sources.tar.gz"}
+                f"WeExport-{version['version']}-third-party-sources.tar.gz"} | deltas
     recorded = {}
     for line in (folder / 'SHA256SUMS').read_text().splitlines():
         checksum, name = line.split('  ', 1)
@@ -38,6 +41,15 @@ def main():
     item = ET.fromstring(feed.read_bytes()).find('./channel/item')
     assert item.findtext(namespace + 'version') == str(version['build']), 'Feed build mismatch'
     assert item.findtext(namespace + 'shortVersionString') == version['version'], 'Feed version mismatch'
+    assert (item.findtext(namespace + 'channel') == 'beta') == beta, 'Feed channel does not match the tag'
+    listed = {}
+    for patch in item.findall(f'{namespace}deltas/enclosure'):
+        name = patch.get('url').rsplit('/', 1)[-1]
+        assert patch.get('url') == f"https://github.com/{config['repository']}/releases/download/{tag}/{name}", 'Delta URL mismatch'
+        assert name in deltas and patch.get('length') == str((folder / name).stat().st_size), 'Delta asset mismatch'
+        assert name == f"WeExport-{version['build']}-from-{patch.get(namespace + 'deltaFrom')}.delta", 'Delta source mismatch'
+        listed[name] = patch.get(namespace + 'edSignature')
+    assert set(listed) == deltas, 'Feed and delta assets differ'
     enclosure = item.find('enclosure')
     assert enclosure.get('url') == f"https://github.com/{config['repository']}/releases/download/{tag}/{archive}", 'Archive URL mismatch'
     assert enclosure.get('length') == str((folder / archive).stat().st_size), 'Archive length mismatch'
@@ -50,6 +62,8 @@ def main():
         subprocess.run(['xcrun', 'swiftc', str(ROOT / 'scripts/VerifySignature.swift'), '-o', str(verifier)], check=True)
         subprocess.run([str(verifier), config['public_key'], signed[1].decode(), str(feed), signed[2].decode()], check=True)
         subprocess.run([str(verifier), config['public_key'], enclosure.get(namespace + 'edSignature'), str(folder / archive)], check=True)
+        for name, signature in listed.items():
+            subprocess.run([str(verifier), config['public_key'], signature, str(folder / name)], check=True)
     with zipfile.ZipFile(folder / archive) as stream:
         info = plistlib.loads(stream.read('WeExport.app/Contents/Info.plist'))
         assert info['CFBundleVersion'] == str(version['build']), 'App build mismatch'

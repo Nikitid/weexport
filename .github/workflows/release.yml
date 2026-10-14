@@ -25,9 +25,27 @@ jobs:
         run: gh release download "$GITHUB_REF_NAME" --dir dist/release
       - name: Verify release assets and installer payload
         run: python3 scripts/verify-release.py "$GITHUB_REF_NAME" dist/release
-      - name: Build release notes
-        run: sh scripts/release-notes.sh "$GITHUB_REF_NAME" > dist/release-notes.md
+      # The draft carries notes built from the source repository's commit subjects.
       - name: Publish verified update
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release edit "$GITHUB_REF_NAME" --draft=false --latest --notes-file dist/release-notes.md
+        run: |
+          case "$GITHUB_REF_NAME" in
+            *_beta*) gh release edit "$GITHUB_REF_NAME" --draft=false --prerelease ;;
+            *) gh release edit "$GITHUB_REF_NAME" --draft=false --latest ;;
+          esac
+      - name: Keep the verified feed for Pages
+        run: mkdir -p site && cp dist/release/appcast.xml site/appcast.xml
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  feed:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/deploy-pages@v4

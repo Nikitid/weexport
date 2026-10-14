@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-[![CI](https://github.com/Nikitid/weexport-updates/actions/workflows/ci.yml/badge.svg)](https://github.com/Nikitid/weexport-updates/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/Nikitid/weexport-updates)](https://github.com/Nikitid/weexport-updates/releases) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![CI](https://github.com/Nikitid/weexport/actions/workflows/ci.yml/badge.svg)](https://github.com/Nikitid/weexport/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/Nikitid/weexport)](https://github.com/Nikitid/weexport/releases) [![License](https://img.shields.io/badge/license-proprietary-lightgrey)](LICENSE)
 
 Публичное размещение установщиков и подписанных обновлений WeExport.
 
@@ -16,7 +16,7 @@ macOS 14 или новее на Apple silicon.
 
 ## Установка
 
-Скачайте установщик в [Releases](https://github.com/Nikitid/weexport-updates/releases).
+Скачайте установщик в [Releases](https://github.com/Nikitid/weexport/releases).
 
 ## Обновления
 
@@ -32,8 +32,11 @@ macOS 14 или новее на Apple silicon.
 
 ## Поддержка
 
-Для отправки описания, необязательной диагностики и выбранных фото или видео используйте "Справка -> Сообщить об ошибке" в WeExport. Диагностику можно просмотреть до отправки. Публичные вопросы размещайте в [Issues](https://github.com/Nikitid/weexport-updates/issues), исключив историю чатов, ключи аккаунта и персональные данные.
+Для отправки описания, необязательной диагностики и выбранных фото или видео используйте "Справка -> Сообщить об ошибке" в WeExport. Диагностику можно просмотреть до отправки. Публичные вопросы размещайте в [Issues](https://github.com/Nikitid/weexport/issues), исключив историю чатов, ключи аккаунта и персональные данные.
 
 ## Лицензия
 
-См. [LICENSE](LICENSE). Сторонние компоненты сохраняют собственные лицензии.
+WeExport - проприетарная программа: бесплатна для использования, но не open
+source. См. [LICENSE](LICENSE). Версии до 1.2.0 включительно вышли под лицензией
+MIT. Сторонние компоненты сохраняют свои лицензии; их исходный код, который
+требуют эти лицензии, приложен к каждому выпуску.

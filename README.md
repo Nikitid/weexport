@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md)
 
-[![CI](https://github.com/Nikitid/weexport-updates/actions/workflows/ci.yml/badge.svg)](https://github.com/Nikitid/weexport-updates/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/Nikitid/weexport-updates)](https://github.com/Nikitid/weexport-updates/releases) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![CI](https://github.com/Nikitid/weexport/actions/workflows/ci.yml/badge.svg)](https://github.com/Nikitid/weexport/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/Nikitid/weexport)](https://github.com/Nikitid/weexport/releases) [![License](https://img.shields.io/badge/license-proprietary-lightgrey)](LICENSE)
 
 Public distribution of WeExport installers and signed updates.
 
@@ -16,7 +16,7 @@ macOS 14 or later on Apple silicon.
 
 ## Installation
 
-Download the installer from [Releases](https://github.com/Nikitid/weexport-updates/releases).
+Download the installer from [Releases](https://github.com/Nikitid/weexport/releases).
 
 ## Updates
 
@@ -32,8 +32,11 @@ Release assets include dependency licenses and corresponding third-party sources
 
 ## Support
 
-Use "Help -> Report a bug" in WeExport to send a description, optional diagnostics, and selected photos or videos. Diagnostics can be reviewed before sending. Public questions can be posted in [Issues](https://github.com/Nikitid/weexport-updates/issues); exclude chat history, account keys, and personal data.
+Use "Help -> Report a bug" in WeExport to send a description, optional diagnostics, and selected photos or videos. Diagnostics can be reviewed before sending. Public questions can be posted in [Issues](https://github.com/Nikitid/weexport/issues); exclude chat history, account keys, and personal data.
 
 ## License
 
-See [LICENSE](LICENSE). Third-party components retain their own licenses.
+WeExport is proprietary software: free to use, not open source. See
+[LICENSE](LICENSE). Versions up to 1.2.0 were published under the MIT License.
+Third-party components keep their own licenses; their required source code is
+attached to each release.
