@@ -1,5 +1,5 @@
 {
-  "repository": "Nikitid/weexport-updates",
-  "feed_url": "https://github.com/Nikitid/weexport-updates/releases/latest/download/appcast.xml",
+  "repository": "Nikitid/weexport",
+  "feed_url": "https://nikitid.github.io/weexport/appcast.xml",
   "public_key": "xeWqfd7IA2qMyczWd/g8aT3+zdv8WAQdbbyrVkhg950="
 }
