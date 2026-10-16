@@ -84,8 +84,11 @@ def main():
         assert component.find(f"./bundle-version/bundle[@id='{identifier}']") is None, 'Installer silently skips downgrades'
         assert component.find(f"./upgrade-bundle/bundle[@id='{identifier}']") is not None, 'Installer must replace the complete bundle'
         assert len(component.findall('./relocate/bundle')) == 0, 'Installer relocation is not allowed'
-        distribution = ET.parse(expanded / 'Distribution').getroot()
-        assert distribution.find(f".//must-close/app[@id='{identifier}']") is not None, 'Installer must close the running application'
+        # The preinstall script asks a running WeExport to quit after its operations and waits for it.
+        preinstall = expanded / 'application.pkg/Scripts/preinstall'
+        script = preinstall.read_text() if preinstall.is_file() else ''
+        assert '-TERM' in script and '/Applications/WeExport.app/Contents/MacOS/WeExport' in script, \
+            'Installer must close the running application before replacing it'
         application = expanded / 'application.pkg/Payload/WeExport.app'
         subprocess.run(['codesign', '--verify', '--deep', '--strict', str(application)], check=True)
         # Verify actual payload bytes, not just package metadata or its filename.
