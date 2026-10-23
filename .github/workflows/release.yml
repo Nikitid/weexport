@@ -36,6 +36,17 @@ jobs:
           esac
       - name: Keep the verified feed for Pages
         run: mkdir -p site && cp dist/release/appcast.xml site/appcast.xml
+      # The Windows feed of the newest windows-* release stays beside the macOS appcast.
+      - name: Keep the Windows feed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,isDraft \
+            --jq '[.[] | select(.isDraft | not) | .tagName | select(startswith("windows-"))][0] // ""')
+          if [ -n "$tag" ]; then
+            gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern windows.json --dir site
+            python3 -c "import json; f=json.load(open('site/windows.json')); assert f['format'] == 1 and f['items']"
+          fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
