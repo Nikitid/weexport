@@ -1,5 +1,12 @@
 {
   "repository": "Nikitid/weexport",
-  "feed_url": "https://nikitid.github.io/weexport/appcast.xml",
+  "feed_url": "https://updates.nikitid.org/weexport/appcast.xml",
+  "windows_feed_url": "https://updates.nikitid.org/weexport/windows.json",
+  "download_base": "https://updates.nikitid.org/weexport/",
+  "legacy_feed_urls": [
+    "https://nikitid.github.io/weexport/appcast.xml",
+    "https://github.com/Nikitid/weexport-updates/releases/latest/download/appcast.xml"
+  ],
+  "legacy_windows_feed_url": "https://nikitid.github.io/weexport/windows.json",
   "public_key": "xeWqfd7IA2qMyczWd/g8aT3+zdv8WAQdbbyrVkhg950="
 }

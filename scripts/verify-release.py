@@ -20,6 +20,7 @@ def main():
     tag, folder = sys.argv[1], Path(sys.argv[2])
     version = json.loads((ROOT / 'version.json').read_text())
     config = json.loads((ROOT / 'updates.json').read_text())
+    assert config['download_base'].startswith('https://') and config['download_base'].endswith('/'), 'Invalid download base'
     beta = tag == f"v{version['version']}_beta{version['build']}"
     assert tag == 'v' + version['version'] or beta, 'Tag does not match version.json'
     archive = f"WeExport-{version['version']}-{version['build']}.zip"
@@ -45,13 +46,13 @@ def main():
     listed = {}
     for patch in item.findall(f'{namespace}deltas/enclosure'):
         name = patch.get('url').rsplit('/', 1)[-1]
-        assert patch.get('url') == f"https://github.com/{config['repository']}/releases/download/{tag}/{name}", 'Delta URL mismatch'
+        assert patch.get('url') == f"{config['download_base']}{tag}/{name}", 'Delta URL mismatch'
         assert name in deltas and patch.get('length') == str((folder / name).stat().st_size), 'Delta asset mismatch'
         assert name == f"WeExport-{version['build']}-from-{patch.get(namespace + 'deltaFrom')}.delta", 'Delta source mismatch'
         listed[name] = patch.get(namespace + 'edSignature')
     assert set(listed) == deltas, 'Feed and delta assets differ'
     enclosure = item.find('enclosure')
-    assert enclosure.get('url') == f"https://github.com/{config['repository']}/releases/download/{tag}/{archive}", 'Archive URL mismatch'
+    assert enclosure.get('url') == f"{config['download_base']}{tag}/{archive}", 'Archive URL mismatch'
     assert enclosure.get('length') == str((folder / archive).stat().st_size), 'Archive length mismatch'
     raw_feed = feed.read_bytes()
     signed = re.search(rb'<!-- sparkle-signatures:\nedSignature: ([A-Za-z0-9+/=]+)\nlength: ([0-9]+)\n-->\s*$', raw_feed)
@@ -103,7 +104,7 @@ def main():
                 target = application / relative
                 assert '..' not in Path(relative).parts, 'Invalid application archive path'
                 if stat.S_ISLNK(entry.external_attr >> 16):
-                    assert target.is_symlink() and os.fsencode(os.readlink(target)) == stream.read(entry), 'Installer symlink mismatch'
+                    assert target.is_symlink() and os.fsencode(target.readlink()) == stream.read(entry), 'Installer symlink mismatch'
                 else:
                     assert target.is_file() and not target.is_symlink(), 'Installer file missing'
                     assert hashlib.sha256(target.read_bytes()).digest() == hashlib.sha256(stream.read(entry)).digest(), 'Installer application differs from signed update'
